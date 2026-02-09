@@ -1,0 +1,8 @@
+**/node_modules
+**/.next
+**/.git
+**/artifacts
+**/cache
+node_modules
+.next
+.git

@@ -1,0 +1,84 @@
+@import "tailwindcss";
+
+@theme {
+  --color-dark-bg: #0B0B0F;
+  --color-dark-secondary: #111118;
+  --color-dark-card: #16161F;
+  --color-dark-border: #262630;
+
+  --color-primary: #0EA5E9;
+  --color-primary-hover: #38BDF8;
+
+  --color-status-success: #22C55E;
+  --color-status-danger: #EF4444;
+  --color-status-warning: #F59E0B;
+  --color-status-info: #3B82F6;
+
+  --color-text-primary: #FFFFFF;
+  --color-text-secondary: #A1A1AA;
+  --color-text-muted: #6B7280;
+
+  --font-sans: Inter, sans-serif;
+}
+
+@layer utilities {
+  .text-gradient {
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-primary to-green-400;
+  }
+
+  .animate-blob {
+    animation: blob 7s infinite;
+  }
+
+  .animation-delay-2000 {
+    animation-delay: 2s;
+  }
+
+  .animation-delay-4000 {
+    animation-delay: 4s;
+  }
+}
+
+@layer components {
+  .glass-card {
+    @apply bg-dark-card/60 border border-white/5 rounded-2xl shadow-xl backdrop-blur-xl transition-all duration-300 hover:shadow-primary/10 hover:border-primary/20;
+  }
+
+  .glass-nav {
+    @apply bg-dark-bg/80 border-b border-white/5 backdrop-blur-xl sticky top-0 z-50;
+  }
+
+  .btn-primary {
+    @apply bg-gradient-to-r from-primary to-cyan-500 hover:from-primary-hover hover:to-cyan-400 text-white font-bold py-2.5 px-6 rounded-xl transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] shadow-lg shadow-primary/25 hover:shadow-primary/40;
+  }
+
+  .btn-secondary {
+    @apply bg-dark-secondary hover:bg-dark-border text-text-primary font-medium py-2 px-4 rounded-xl transition-all duration-300 border border-dark-border hover:border-text-muted/50;
+  }
+
+  .input-field {
+    @apply bg-dark-secondary/50 border border-dark-border rounded-xl px-4 py-2 focus:ring-2 focus:ring-primary/50 focus:border-primary outline-none transition-all placeholder-text-muted text-text-primary backdrop-blur-sm;
+  }
+}
+
+body {
+  @apply bg-dark-bg text-text-primary antialiased selection:bg-primary/30;
+}
+
+@keyframes blob {
+  0% {
+    transform: translate(0px, 0px) scale(1);
+  }
+
+  33% {
+    transform: translate(30px, -50px) scale(1.1);
+  }
+
+  66% {
+    transform: translate(-20px, 20px) scale(0.9);
+  }
+
+  100% {
+    transform: translate(0px, 0px) scale(1);
+  }
+}
