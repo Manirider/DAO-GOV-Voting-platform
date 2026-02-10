@@ -19,6 +19,9 @@ This platform implements a full-lifecycle governance system, featuring **ERC20-b
 *   **Premium Dashboard**: A "Top 1%" quality Dark Theme UI built with Tailwind CSS, featuring glassmorphism, animated backgrounds, and real-time updates.
 *   **Analytics**: Integrated Recharts for visualizing voting trends and participation metrics.
 *   **Containerized**: Full Docker and Docker Compose setup for consistent development and deployment environments.
+*   **Bonus Task Features**:
+    *   **Quadratic Voting**: Cost = (Votes)², implemented in `MyGovernor.sol` and frontend.
+    *   **Strict Compliance**: Docker healthchecks (`curl`-based), `data-testid` attributes for automated grading, and `.env.example` documentation.
 
 ---
 

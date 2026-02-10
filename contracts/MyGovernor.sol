@@ -42,7 +42,7 @@ contract MyGovernor is
         uint256[] memory values,
         bytes[] memory calldatas,
         string memory description
-    ) public override(Governor, IGovernor) returns (uint256) {
+    ) public override(Governor) returns (uint256) {
         uint256 proposalId = super.propose(
             targets,
             values,
@@ -101,9 +101,9 @@ contract MyGovernor is
         uint8 support,
         uint256 weight,
         bytes memory params
-    ) internal override(Governor, GovernorCountingSimple) {
+    ) internal override(Governor, GovernorCountingSimple) returns (uint256) {
         if (proposalVotingType[proposalId] == VotingType.Standard) {
-            super._countVote(proposalId, account, support, weight, params);
+            return super._countVote(proposalId, account, support, weight, params);
         } else {
             uint256 desiredVotes = 1;
             // params is encoded valid votes?
@@ -124,7 +124,7 @@ contract MyGovernor is
             require(weight >= cost, "QV: Insufficient voting power");
 
             // We count 'desiredVotes'
-            super._countVote(
+            return super._countVote(
                 proposalId,
                 account,
                 support,

@@ -23,11 +23,34 @@
 
 @layer utilities {
   .text-gradient {
-    @apply bg-clip-text text-transparent bg-gradient-to-r from-primary to-green-400;
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-primary via-cyan-400 to-green-400;
+    animation: gradient-x 15s ease infinite;
+    background-size: 200% 200%;
+  }
+
+  .bg-noise {
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.05'/%3E%3C/svg%3E");
   }
 
   .animate-blob {
     animation: blob 7s infinite;
+  }
+
+  .animate-gradient-x {
+    animation: gradient-x 15s ease infinite;
+    background-size: 200% 200%;
+  }
+
+  .animate-tilt {
+    transition: transform 0.1s ease-in-out;
+  }
+  
+  .glass-card:hover .animate-tilt {
+     transform: perspective(1000px) rotateX(2deg) rotateY(2deg);
+  }
+
+  .glow-shadow {
+    box-shadow: 0 0 20px rgba(14, 165, 233, 0.3);
   }
 
   .animation-delay-2000 {
@@ -49,7 +72,15 @@
   }
 
   .btn-primary {
-    @apply bg-gradient-to-r from-primary to-cyan-500 hover:from-primary-hover hover:to-cyan-400 text-white font-bold py-2.5 px-6 rounded-xl transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] shadow-lg shadow-primary/25 hover:shadow-primary/40;
+    @apply relative overflow-hidden bg-gradient-to-r from-primary via-cyan-500 to-primary text-white font-bold py-3 px-8 rounded-xl transition-all duration-300 hover:scale-[1.05] active:scale-[0.98] shadow-[0_0_20px_rgba(14,165,233,0.3)] hover:shadow-[0_0_30px_rgba(14,165,233,0.5)] border border-white/10;
+    background-size: 200% auto;
+    animation: shine 3s linear infinite;
+  }
+
+  @keyframes shine {
+    to {
+      background-position: 200% center;
+    }
   }
 
   .btn-secondary {
@@ -80,5 +111,14 @@ body {
 
   100% {
     transform: translate(0px, 0px) scale(1);
+  }
+}
+
+@keyframes gradient-x {
+  0%, 100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
   }
 }
