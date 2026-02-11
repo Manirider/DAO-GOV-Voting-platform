@@ -114,7 +114,23 @@ npx hardhat test
 
 ---
 
-## 🔐 Security Considerations
+## � Visual Showcase
+
+### Premium Dashboard
+![Premium Dashboard](docs/assets/dashboard_polish.png)
+
+### Quadratic Voting & Realtime Status
+![Functional Dashboard](docs/assets/dashboard_functional.png)
+
+### Immersive Hero Section
+![Hero Section](docs/assets/dashboard_hero.png)
+
+### Custom Theme (Sky Blue & Green)
+![Themes](docs/assets/dashboard_theme.png)
+
+---
+
+## �🔐 Security Considerations
 
 *   **OpenZeppelin Standards**: Contracts inherit from audited OpenZeppelin bases to minimize vulnerability surface.
 *   **Timelock**: Critical system changes are subject to a time delay, allowing users to exit if they disagree with a governance update.
