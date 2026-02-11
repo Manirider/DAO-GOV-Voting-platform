@@ -10,7 +10,7 @@ contract GovernanceToken is ERC20, ERC20Permit, ERC20Votes {
         _mint(msg.sender, 1000000 * 10 ** decimals());
     }
 
-    // The following functions are overrides required by Solidity.
+
 
     function _update(address from, address to, uint256 value)
         internal

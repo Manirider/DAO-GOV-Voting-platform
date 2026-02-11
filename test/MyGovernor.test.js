@@ -20,7 +20,6 @@ describe("DAO Governance", function () {
         const MyGovernor = await ethers.getContractFactory("MyGovernor");
         const governor = await MyGovernor.deploy(await token.getAddress(), await timelock.getAddress());
 
-        // Setup roles
         const PROPOSER_ROLE = await timelock.PROPOSER_ROLE();
         const EXECUTOR_ROLE = await timelock.EXECUTOR_ROLE();
         const TIMELOCK_ADMIN_ROLE = await timelock.TIMELOCK_ADMIN_ROLE();
@@ -28,9 +27,6 @@ describe("DAO Governance", function () {
         await timelock.grantRole(PROPOSER_ROLE, await governor.getAddress());
         await timelock.grantRole(EXECUTOR_ROLE, ethers.ZeroAddress);
 
-        // Distribute tokens and delegate
-        // Mint is in constructor to msg.sender (owner)
-        // Transfer some to voters
         const amount = ethers.parseEther("100");
         await token.transfer(voter1.address, amount);
         await token.transfer(voter2.address, amount);
@@ -71,10 +67,7 @@ describe("DAO Governance", function () {
             );
 
             const receipt = await tx.wait();
-            const event = receipt.logs.find(x => x.eventName === 'ProposalCreated'); // Incorrect, need to check abi
-            // For simplicity in finding ID, we can re-fetch or look at logs.
-            // Easiest is to calculate ID deterministically or parse logs properly.
-            // But let's just use the helper:
+            
             const proposalId = await governor.hashProposal(
                 [await token.getAddress()],
                 [0],
@@ -82,17 +75,12 @@ describe("DAO Governance", function () {
                 ethers.keccak256(ethers.toUtf8Bytes(description))
             );
 
-            // Advance delay
             await time.increase(7200 + 1);
 
-            // Vote
-            // 0 = Against, 1 = For, 2 = Abstain
             await governor.connect(voter1).castVote(proposalId, 1);
 
-            // Advance voting period
             await time.increase(50400 + 1);
 
-            // Queue
             await governor.queue(
                 [await token.getAddress()],
                 [0],
@@ -100,8 +88,6 @@ describe("DAO Governance", function () {
                 ethers.keccak256(ethers.toUtf8Bytes(description))
             );
 
-            // Execute
-            // Timelock delay is 0
             await governor.execute(
                 [await token.getAddress()],
                 [0],
@@ -109,7 +95,7 @@ describe("DAO Governance", function () {
                 ethers.keccak256(ethers.toUtf8Bytes(description))
             );
 
-            expect(await governor.state(proposalId)).to.equal(7); // Executed
+            expect(await governor.state(proposalId)).to.equal(7);
         });
     });
 
@@ -117,7 +103,7 @@ describe("DAO Governance", function () {
         it("Should correctly enforce quadratic cost", async function () {
             const { token, governor, owner, voter1 } = await loadFixture(deployFixture);
 
-            const description = "Proposal #2: QV Test #QV"; // Contains #QV tag
+            const description = "Proposal #2: QV Test #QV";
             const transferCalldata = token.interface.encodeFunctionData("transfer", [owner.address, ethers.parseEther("1")]);
 
             await governor.connect(owner).propose(
@@ -136,11 +122,6 @@ describe("DAO Governance", function () {
 
             await time.increase(7200 + 1);
 
-            // Voter1 has 100 tokens. Sqrt(100) = 10 votes max.
-            // Try to vote with 11 votes -> Cost 121 > 100 -> Should revert.
-            // NOTE: We need to pass params for QV!
-            // params = abi.encode(desiredVotes)
-
             const desiredVotesTooHigh = 11;
             const paramsTooHigh = ethers.AbiCoder.defaultAbiCoder().encode(["uint256"], [desiredVotesTooHigh]);
 
@@ -148,7 +129,6 @@ describe("DAO Governance", function () {
                 governor.connect(voter1).castVoteWithParams(proposalId, 1, paramsTooHigh)
             ).to.be.revertedWith("QV: Insufficient voting power");
 
-            // Try with 10 votes -> Cost 100 <= 100 -> Should succeed.
             const desiredVotesOK = 10;
             const paramsOK = ethers.AbiCoder.defaultAbiCoder().encode(["uint256"], [desiredVotesOK]);
 
@@ -156,10 +136,8 @@ describe("DAO Governance", function () {
                 governor.connect(voter1).castVoteWithParams(proposalId, 1, paramsOK)
             ).to.emit(governor, "VoteCast");
 
-            // Verify votes counted
-            // Check proposal votes
             const votes = await governor.proposalVotes(proposalId);
-            expect(votes.forVotes).to.equal(desiredVotesOK); // Should be 10, not 100
+            expect(votes.forVotes).to.equal(desiredVotesOK);
         });
     });
 });

@@ -21,11 +21,9 @@ async function main() {
     const GovernanceToken = await hre.ethers.getContractFactory("GovernanceToken");
     const token = GovernanceToken.attach(tokenAddress);
 
-    // Check voting power
     const votes = await token.getVotes(deployer.address);
     console.log(`Current voting power: ${hre.ethers.formatEther(votes)} tokens`);
 
-    // Create a proposal
     const proposalDescription = "Proposal #1: Seed Proposal for Testing Realtime Features #QV";
     const transferCalldata = token.interface.encodeFunctionData("transfer", [deployer.address, hre.ethers.parseEther("100")]);
     
@@ -40,8 +38,6 @@ async function main() {
     const proposalId = receipt.logs[0].args.proposalId;
     console.log(`Proposal created with ID: ${proposalId}`);
 
-    // Mine blocks to make it active (voting delay)
-    // Assuming 1 block delay
     console.log("Mining blocks for voting delay...");
     await hre.network.provider.send("evm_mine"); 
     await hre.network.provider.send("evm_mine");

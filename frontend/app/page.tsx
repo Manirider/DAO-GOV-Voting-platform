@@ -7,9 +7,9 @@ import { Plus, ArrowRight, BookOpen, MessageSquare, Shield } from "lucide-react"
 export default function Home() {
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-      {/* Hero / Header Section - Redesigned for Impact */}
+
       <div className="relative min-h-[60vh] flex flex-col items-center justify-center text-center gap-8 mb-20">
-         {/* Background Glows */}
+
          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[500px] bg-gradient-to-r from-primary/20 via-purple-500/20 to-green-400/20 rounded-full blur-[100px] -z-10 animate-pulse" />
          
          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/5 border border-white/10 backdrop-blur-md shadow-xl animate-fade-in-up">
@@ -41,7 +41,7 @@ export default function Home() {
          </div>
       </div>
 
-      {/* Overview Stats */}
+
       <section className="mb-12">
         <div className="flex items-center justify-between mb-6">
           <h2 className="text-xl font-bold text-text-primary flex items-center gap-2">
@@ -52,9 +52,9 @@ export default function Home() {
         <OverviewCards />
       </section>
 
-      {/* Main Content Grid */}
+
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-10">
-        {/* Left Column: Proposals (8 cols) */}
+
         <div className="lg:col-span-8 space-y-8">
           <div className="flex items-center justify-between border-b border-white/5 pb-4">
             <h2 className="text-2xl font-bold text-text-primary">Recent Proposals</h2>
@@ -68,10 +68,10 @@ export default function Home() {
           <ProposalList />
         </div>
 
-        {/* Right Column: Sidebar (4 cols) */}
+
         <div className="lg:col-span-4 space-y-8">
           
-          {/* Quadratic Voting Info Card - Enhanced */}
+
           <div className="group relative p-8 rounded-3xl bg-gradient-to-br from-sky-500/10 via-dark-card to-green-500/10 border border-sky-500/20 shadow-2xl overflow-hidden hover:shadow-sky-500/10 transition-all duration-500">
              <div className="absolute inset-0 bg-noise opacity-20 mix-blend-overlay"></div>
              <div className="absolute -top-24 -right-24 w-48 h-48 bg-primary/20 rounded-full blur-3xl group-hover:bg-primary/30 transition-colors duration-700"></div>
@@ -105,7 +105,7 @@ export default function Home() {
              </div>
           </div>
 
-          {/* Resources & Links */}
+
           <div className="glass-card p-6">
             <h3 className="font-bold text-lg text-text-primary mb-6 flex items-center gap-2">
               <BookOpen size={18} className="text-primary" />

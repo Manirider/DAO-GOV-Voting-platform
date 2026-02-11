@@ -15,7 +15,7 @@ export function AnalyticsChart({ forVotes, againstVotes, abstainVotes }: Analyti
         { name: 'Abstain', value: abstainVotes, color: '#6B7280' },
     ];
 
-    // Filter out zero values for better chart rendering
+
     const activeData = data.filter(d => d.value > 0);
     const totalVotes = forVotes + againstVotes + abstainVotes;
 

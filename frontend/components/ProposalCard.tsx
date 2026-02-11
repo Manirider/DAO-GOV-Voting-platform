@@ -7,14 +7,13 @@ interface Proposal {
     id: string;
     proposer: string;
     description: string;
-    status: string; // 'Active', 'Pending', etc.
+    status: string;
     type: 'Standard' | 'Quadratic';
     votesFor: number;
     votesAgainst: number;
     endTime: string;
 }
 
-// Helper to determine status style
 const getStatusStyle = (status: string) => {
     switch (status) {
         case 'Active':
@@ -41,22 +40,10 @@ const getStatusIcon = (status: string) => {
 };
 
 export function ProposalCard({ proposal }: { proposal: any }) {
-    // Mock data integration for now, mapped from real proposal props
     const isQuadratic = proposal.description.includes("#QV");
-
-    // Status Logic (Reuse from previous ProposalItem or pass down)
-    // For now we assume the parent passed a processed 'status' string or we derive it.
-    // The previous component derived it from a contract read. 
-    // Ideally, the list fetches state for all. 
-    // To keep it simple and performant, we might want to fetch state inside here or accept it as prop.
-    // Let's assume the parent `ProposalList` handles fetching or we fetch here.
-    // Re-implementing the hook call here for now to match previous logic.
-
-    // ... logic would go here. For UI demo purposes, I'll structure the card layout first.
 
     return (
         <Link href={`/proposal/${proposal.id}`} className="block group relative">
-            {/* Gradient Border Glow */}
             <div className="absolute -inset-0.5 bg-gradient-to-r from-primary to-green-400 rounded-2xl opacity-0 group-hover:opacity-30 blur transition duration-500" />
 
             <div data-testid="proposal-list-item" className="glass-card p-6 relative overflow-hidden transition-all duration-300 group-hover:-translate-y-1">
@@ -100,7 +87,6 @@ export function ProposalCard({ proposal }: { proposal: any }) {
                     </div>
                 </div>
 
-                {/* Enhanced Progress Bar */}
                 <div className="mt-5 h-2 w-full bg-dark-secondary/50 rounded-full overflow-hidden backdrop-blur-sm">
                     <div className="h-full bg-gradient-to-r from-primary to-green-400 w-[70%] shadow-[0_0_10px_rgba(14,165,233,0.3)]" />
                 </div>

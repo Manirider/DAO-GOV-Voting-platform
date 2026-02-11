@@ -28,15 +28,12 @@ contract MyGovernor is
         TimelockController _timelock
     )
         Governor("MyGovernor")
-        GovernorSettings(7200, /* 1 day */ 50400, 100e18) // 100 tokens threshold
+        GovernorSettings(7200, 50400, 100e18)
         GovernorVotes(_token)
         GovernorVotesQuorumFraction(4)
         GovernorTimelockControl(_timelock)
     {}
 
-    // Override propose to allow specifying voting type via description or just default to Standard
-    // Ideally we would pass it as an argument, but the standard interface is fixed.
-    // We can parse the description for a tag like "#QV" to enable Quadratic Voting.
     function propose(
         address[] memory targets,
         uint256[] memory values,
@@ -50,7 +47,6 @@ contract MyGovernor is
             description
         );
 
-        // Simple check for Quadratic Voting tag in description
         if (contains(description, "#QV")) {
             proposalVotingType[proposalId] = VotingType.Quadratic;
         } else {
@@ -60,38 +56,12 @@ contract MyGovernor is
         return proposalId;
     }
 
-    // Override _getVotes to handle Quadratic Voting logic
-    // This ensures the weight passed to counting and emitted in events is the effective votes.
     function _getVotes(
         address account,
         uint256 timepoint,
         bytes memory params
     ) internal view override(Governor, GovernorVotes) returns (uint256) {
-        // Default to standard votes (balance)
         uint256 rawBalance = super._getVotes(account, timepoint, params);
-
-        // We can't access proposalVotingType here easily because _getVotes doesn't know the proposalId.
-        // The `Governor` calls `_getVotes` inside `_castVote` with `params`.
-        // `proposalId` is passed to `_castVote` but NOT to `_getVotes` in the standard OZ implementation?
-        // Wait, checking OZ 5.0 source:
-        // function _castVote(...) internal virtual returns (uint256) {
-        //     ...
-        //     uint256 weight = _getVotes(account, proposalId, params); // WAIT, does it pass proposalId?
-        // }
-        // Actually, OZ Governor `_getVotes` signature is:
-        // function _getVotes(address account, uint256 blockNumber, bytes memory params) ...
-        // It DOES NOT take proposalId.
-
-        // This is a problem for the `_getVotes` strategy if we need per-proposal logic.
-        // If I cannot see proposalId in _getVotes, I cannot switch logic based on proposal type.
-
-        // REVERTING STRATEGY:
-        // I must use `_countVote` or `_castVote` override where I have `proposalId`.
-        // I will revert to overriding `_countVote` as originally planned.
-        // It's the most reliable place where I have `proposalId`, `account`, and `params`.
-        // And I will accept that the core `VoteCast` event emits the raw balance (weight returned by _getVotes).
-        // OR, I can emit a separate event `QuadraticVoteCast` for clarity.
-
         return rawBalance;
     }
 
@@ -106,24 +76,16 @@ contract MyGovernor is
             return super._countVote(proposalId, account, support, weight, params);
         } else {
             uint256 desiredVotes = 1;
-            // params is encoded valid votes?
-            // If the user uses a standard interface they might not pass params.
-            // If params is empty, default to 1 vote (min cost 1 token)? Or sqrt(balance)?
-            // Let's assume if params is empty, we try to use max possible votes? No, that's dangerous/expensive.
-            // Default to 1 vote if no params.
 
             if (params.length > 0) {
                 desiredVotes = abi.decode(params, (uint256));
             } else {
-                // Fallback or error?
-                // Let's calculate max votes: int(sqrt(weight))
                 desiredVotes = sqrt(weight);
             }
 
             uint256 cost = desiredVotes * desiredVotes;
             require(weight >= cost, "QV: Insufficient voting power");
 
-            // We count 'desiredVotes'
             return super._countVote(
                 proposalId,
                 account,
@@ -134,7 +96,6 @@ contract MyGovernor is
         }
     }
 
-    // Math helper
     function sqrt(uint256 x) internal pure returns (uint256 y) {
         uint256 z = (x + 1) / 2;
         y = x;
@@ -144,7 +105,6 @@ contract MyGovernor is
         }
     }
 
-    // Helper to check string contains
     function contains(
         string memory what,
         string memory where
@@ -170,8 +130,6 @@ contract MyGovernor is
         }
         return found;
     }
-
-    // The following functions are overrides required by Solidity.
 
     function votingDelay()
         public

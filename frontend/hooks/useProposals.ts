@@ -13,7 +13,7 @@ export interface Proposal {
     startBlock: string;
     endBlock: string;
     description: string;
-    status?: number; // 0:Pending, 1:Active, etc.
+    status?: number;
 }
 
 export function useProposals() {
@@ -47,7 +47,6 @@ export function useProposals() {
                     }
                 });
 
-                // Reverse to show newest first
                 setProposals(parsedProposals.reverse());
             } catch (error) {
                 console.error("Error fetching proposals:", error);
