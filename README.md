@@ -1,4 +1,5 @@
 # Decentralized On-Chain Governance and Voting Platform
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2FManirider%2FDAO-GOV-Voting-platform&root-directory=frontend)
 
 ## One-Line Description
 A full-stack, production-grade DAO governance system enabling secure, transparent, and democratic decision-making on the Ethereum blockchain.
@@ -25,6 +26,7 @@ Blockchain governance is critical for ensuring that protocol changes and treasur
 The system is composed of three main layers:
 
 1.  **Smart Contracts (Hardhat)**: Written in Solidity, these contracts manage the governance logic, token distribution, and time-locked execution of proposals. Hardhat is used for compilation, deployment, and testing.
+
 2.  **Frontend (Next.js)**: A React-based web application that interacts with the deployed smart contracts. It provides a user-friendly interface for proposing and voting.
 3.  **Blockchain Interaction**: The frontend communicates with the Ethereum network (or local Hardhat node) using JSON-RPC providers and the ethers/viem libraries.
 4.  **Docker Environment**: Docker Compose orchestrates the local blockchain node, deployment scripts, and the frontend server, ensuring a reproducible environment.
@@ -193,7 +195,5 @@ The tests cover:
 ## Author
 
 **Manikanta Suryasai**
-
----
 
 *This project is part of a portfolio demonstrating advanced blockchain development skills.*
