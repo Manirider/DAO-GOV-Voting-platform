@@ -35,29 +35,53 @@ export function ConnectWallet() {
         )
     }
 
-    // Find the injected connector (usually MetaMask or browser wallet)
-    const injectedConnector = connectors.find((c) => c.type === 'injected')
-
     return (
-        <div className="flex flex-col items-center">
+        <div className="flex flex-col items-center relative">
              <button
                 data-testid="connect-wallet-button"
                 onClick={() => {
-                    if (injectedConnector) {
-                        connect({ connector: injectedConnector })
+                    const connector = connectors[0];
+                    if (connector) {
+                        connect({ connector })
                     } else {
-                        // Fallback: Try the first available connector if injected not found by type ID
-                        const first = connectors[0];
-                        if(first) connect({ connector: first })
+                        // If no connectors exist at all (rare with wagmi defaults)
+                        window.open('https://metamask.io/download/', '_blank');
                     }
                 }}
-                disabled={status === 'pending' || !connectors.length}
+                disabled={status === 'pending'}
                 className="btn-primary flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
             >
                 {status === 'pending' ? <Loader2 className="animate-spin" size={18} /> : <Wallet size={18} />}
                 {status === 'pending' ? "Connecting..." : "Connect Wallet"}
             </button>
-            {error && <div className="text-red-500 text-xs mt-1 absolute top-16 right-0 bg-dark-card p-2 rounded border border-red-500/50">{error.message}</div>}
+            
+            {error && (
+                <div className="absolute top-full mt-2 right-0 w-64 p-3 bg-dark-card border border-status-danger/50 rounded-xl shadow-xl z-50 animate-in fade-in slide-in-from-top-2">
+                    <div className="flex items-start gap-2">
+                        <div className="text-status-danger mt-0.5">
+                            <LogOut size={16} className="rotate-180" /> {/* Using LogOut as Alert icon proxy or import AlertCircle */}
+                        </div>
+                        <div className="flex-1">
+                            <p className="text-xs font-bold text-white mb-1">Connection Failed</p>
+                            <p className="text-xs text-text-secondary mb-2">
+                                {error.message.includes("Provider not found") 
+                                    ? "No wallet detected. You need a crypto wallet to interact." 
+                                    : error.message}
+                            </p>
+                            {error.message.includes("Provider not found") && (
+                                <a 
+                                    href="https://metamask.io/download/" 
+                                    target="_blank" 
+                                    rel="noopener noreferrer"
+                                    className="block text-center py-1.5 px-3 rounded-lg bg-primary/10 text-primary hover:bg-primary/20 text-xs font-bold transition-colors"
+                                >
+                                    Install MetaMask
+                                </a>
+                            )}
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     )
 }
