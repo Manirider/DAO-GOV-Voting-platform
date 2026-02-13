@@ -54,19 +54,9 @@ export function CreateProposalModal({ isOpen, onClose }: CreateProposalModalProp
                         }
                    }
                }
-            } catch (err) {
-                        // Try raw encoding (dangerous/brittle without type info)
-                        // Better approach: Just take raw calldata input for advanced users
-                        // For this demo: Let's assume standard calldata input not supported mostly
-                        // Let's rely on empty calldata for "Signal Only" proposals if args are empty
-                        if(args) {
-                             throw new Error("Complex arg encoding not implemented in demo. Use empty args for signal proposal.");
-                        }
-                   }
-               }
-            } catch (err) {
+            } catch (err: any) {
                  console.error(err);
-                 setError("Error encoding data. Check console.");
+                 setError(err.message || "Error encoding data.");
                  return;
             }
 
