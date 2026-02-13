@@ -1,12 +1,17 @@
 'use client'
 
+import { useState } from 'react';
 import { OverviewCards } from "../components/OverviewCards";
 import { ProposalList } from "../components/ProposalList";
+import { CreateProposalModal } from "../components/CreateProposalModal";
 import { Plus, ArrowRight, BookOpen, MessageSquare, Shield } from "lucide-react";
 
 export default function Home() {
+    const [isModalOpen, setIsModalOpen] = useState(false);
+
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <CreateProposalModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
 
       <div className="relative min-h-[60vh] flex flex-col items-center justify-center text-center gap-8 mb-20">
 
@@ -28,7 +33,10 @@ export default function Home() {
          </div>
 
          <div className="flex items-center gap-4 z-10 mt-4">
-            <button className="btn-primary flex items-center gap-3 group px-8 py-4 text-lg">
+            <button 
+                onClick={() => setIsModalOpen(true)}
+                className="btn-primary flex items-center gap-3 group px-8 py-4 text-lg"
+            >
               <div className="bg-white/20 p-1.5 rounded-lg group-hover:rotate-180 transition-transform duration-700">
                  <Plus size={20} />
               </div>
