@@ -105,6 +105,25 @@ docker-compose up --build
 
 This command will start the local node, deploy the contracts, and launch the frontend automatically.
 
+
+### Deployment (Vercel)
+
+The frontend is ready for deployment on Vercel.
+
+1.  **Push to GitHub**: Ensure your repository is up to date.
+2.  **Import to Vercel**:
+    *   Go to Vercel Dashboard -> Add New -> Project.
+    *   Select your GitHub repository.
+3.  **Configure Project**:
+    *   **Framework Preset**: Next.js
+    *   **Root Directory**: `frontend` (Edit the root directory setting).
+4.  **Deploy**: Click "Deploy".
+
+> **Note on Contracts**: The current configuration points to *Localhost* contracts (Hardhat Node). For a public Vercel deployment to work for other users, you must:
+> 1.  Deploy contracts to a testnet (e.g., Sepolia).
+> 2.  Update `frontend/config/contract-address.json` with the new addresses.
+> 3.  Push the changes and redeploy the frontend.
+
 ## Environment Variables
 
 Copy the `.env.example` file to `.env` in the root directory.
